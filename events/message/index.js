@@ -1,6 +1,6 @@
 import consola from 'consola'
-import auth from '#events/message/auth_server'
 import { BOT_STATE } from '#utils/bot_status'
+import auth from '#events/message/auth_server'
 
 export default async (bot) => {
   bot.on('message', (message) => {
@@ -11,7 +11,7 @@ export default async (bot) => {
 
     // auth
     if (!BOT_STATE.isLoggedIn) {
-      auth(bot, msg)
+      auth(bot, message)
     }
 
     if (!BOT_STATE.isLoggedIn) {

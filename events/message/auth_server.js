@@ -3,7 +3,9 @@ import { BOT_STATE } from '#utils/bot_status'
 
 const AUTH_PASSWORD = 'test123'
 
-export default async (bot, msg) => {
+export default async (bot, message) => {
+  const msg = message.toString()
+
   if (msg.includes('/register')) {
     bot.chat(`/register ${AUTH_PASSWORD}`)
   }

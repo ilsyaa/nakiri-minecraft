@@ -1,5 +1,4 @@
 import MCData from 'minecraft-data'
-const MinecraftData = MCData('1.21.8')
 import consola from 'consola'
 import { BOT_STATE } from '#utils/bot_status'
 import ai from '#start/ai'
@@ -14,6 +13,7 @@ export async function autoEat(bot) {
   BOT_STATE.isEating = true
 
   try {
+    const MinecraftData = MCData(bot.version)
     while (bot.food < 20) {
       const foodIds = MinecraftData.foodsArray.map((f) => f.id)
       const foodItem = bot.inventory
