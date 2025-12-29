@@ -7,19 +7,22 @@
   "type": "module",
   "main": "nakiri.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node nakiri.js",
+    "dev": "nodemon nakiri.js"
   },
   "dependencies": {
     "consola": "^3.4.2",
     "dotenv": "^17.2.3",
     "minecraft-data": "^3.97.0",
-    "minecraft-protocol": "^1.62.0",
-    "mineflayer": "^4.33.0",
+    "minecraft-protocol": "^1.26.5",
+    "mineflayer": "^4.0.0",
     "mineflayer-pathfinder": "^2.4.5"
   },
   "imports": {
     "#behaviors/*": "./behaviors/*.js",
     "#events/*": "./events/*.js",
-    "#utils/*": "./utils/*.js"
+    "#utils/*": "./utils/*.js",
+    "#config": "./config/app.js"
   }
 }
