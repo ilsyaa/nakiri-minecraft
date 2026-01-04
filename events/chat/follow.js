@@ -10,13 +10,16 @@ export default async (bot, ctx) => {
 
   if (pelr.ok) {
     const content = JSON.parse(pelr.content)
-    const target = bot.players[content.target] || bot.players[ctx.username]
+    const target = content.target
+      ? bot.players[content.target]
+      : bot.players[ctx.username]
+
     switch (content.intent) {
       case 'FOLLOW':
         startFollowBehavior({
           bot,
           target,
-          chatMessage: content.reply
+          chatMessage: content.reply,
         })
         break
       case 'GOTO_PLAYER':
@@ -25,6 +28,7 @@ export default async (bot, ctx) => {
         BOT_STATE.mode = BOT_MODE.IDLE
         BOT_STATE.followTarget = null
         bot.pathfinder.setGoal(null)
+        bot.chat(content.reply)
         break
       case 'CHAT':
         bot.chat(content.reply)
