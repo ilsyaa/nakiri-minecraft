@@ -5,9 +5,9 @@ import ai from '#start/ai'
   if (resOne.ok) {
     console.log(JSON.parse(resOne.content))
   }
+
   const resTwo = await ai.processPlayerMessage('si asep')
   if (resTwo.ok) {
     console.log(JSON.parse(resTwo.content))
   }
-})
-()
+})()

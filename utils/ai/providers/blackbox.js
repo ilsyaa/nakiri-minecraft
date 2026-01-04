@@ -64,7 +64,7 @@ export default class BlackboxProvider extends BaseProvider {
 
       const messages = [
         {
-          role: 'system',
+          role: 'user',
           content: this.promptProccessMessage,
         },
         ...Array.from(this.memory).map((message) => ({

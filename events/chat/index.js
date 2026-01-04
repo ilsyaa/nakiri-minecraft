@@ -1,5 +1,5 @@
 import { BOT_STATE } from '#utils/bot_status'
-import follow from '#events/chat/follow'
+import ai from '#events/chat/ai'
 
 export default async (bot) => {
   bot.on('chat', async (username, message) => {
@@ -9,6 +9,6 @@ export default async (bot) => {
       return
     }
 
-    follow(bot, { username, message })
+    ai(bot, { username, message })
   })
 }

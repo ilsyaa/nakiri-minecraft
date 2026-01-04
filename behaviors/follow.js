@@ -1,6 +1,7 @@
 import { BOT_STATE, BOT_MODE } from '#utils/bot_status'
 import pathfinder from 'mineflayer-pathfinder'
 import mcDataFactory from 'minecraft-data'
+const { GoalFollow } = pathfinder.goals
 
 export function startFollowBehavior({
   bot,
@@ -21,7 +22,6 @@ export function startFollowBehavior({
   BOT_STATE.followTarget = target.entity
   BOT_STATE.mode = BOT_MODE.FOLLOW
 
-  const { GoalFollow } = pathfinder.goals
   bot.pathfinder.setGoal(new GoalFollow(BOT_STATE.followTarget, 3), true)
 
   bot.chat(chatMessage)
