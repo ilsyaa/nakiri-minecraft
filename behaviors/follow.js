@@ -2,7 +2,11 @@ import { BOT_STATE, BOT_MODE } from '#utils/bot_status'
 import pathfinder from 'mineflayer-pathfinder'
 import mcDataFactory from 'minecraft-data'
 
-export function startFollowBehavior(bot, target) {
+export function startFollowBehavior({
+  bot,
+  target,
+  chatMessage = 'Siap, aku ikuti kamu!',
+}) {
   const mcData = mcDataFactory(bot.version)
 
   const movements = new pathfinder.Movements(bot, mcData)
@@ -11,13 +15,14 @@ export function startFollowBehavior(bot, target) {
   movements.canOpenDoors = true
   movements.allowFreeMotion = true
   movements.allowParkour = true
+  movements.allowSprinting = true
   bot.pathfinder.setMovements(movements)
 
   BOT_STATE.followTarget = target.entity
   BOT_STATE.mode = BOT_MODE.FOLLOW
 
   const { GoalFollow } = pathfinder.goals
-  bot.pathfinder.setGoal(new GoalFollow(BOT_STATE.followTarget, 2), true)
+  bot.pathfinder.setGoal(new GoalFollow(BOT_STATE.followTarget, 3), true)
 
-  bot.chat(`Siap, aku ikuti kamu!`)
+  bot.chat(chatMessage)
 }

@@ -1,6 +1,7 @@
 export const BOT_MODE = {
   IDLE: 'idle',
   FOLLOW: 'follow',
+  GOTO_PLAYER: 'goto_player'
 }
 
 export const BOT_STATE = {

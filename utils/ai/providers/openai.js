@@ -1,26 +1,23 @@
 import OpenAI from 'openai'
 import BaseProvider from '#utils/ai/index'
 import env from '#start/env'
+import fs from 'fs'
+import path from 'path'
 
 export default class OpenAIProvider extends BaseProvider {
   constructor() {
     super('openai')
     this.apiKey = env.get('OPENAI_API_KEY')
     this.model = env.get('OPENAI_MODEL')
+    this.promptProccessMessage = fs.readFileSync(path.join(process.cwd(), 'utils/ai/prompts/player_message.txt'), 'utf-8')
   }
 
-  async chat(message, options = {}) {
+  async processPlayerMessage(message) {
     try {
       const client = new OpenAI({ apiKey: this.apiKey })
       const completion = await client.chat.completions.create({
         model: this.model,
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful AI.',
-          },
-          { role: 'user', content: message },
-        ],
+        messages: [{ role: 'user', parts: [{ text: this.promptProccessMessage }] }],
         ...options,
       })
 

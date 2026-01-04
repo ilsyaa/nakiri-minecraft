@@ -26,16 +26,7 @@ export async function autoEat(bot) {
         const now = Date.now()
         if (now - LAST_NO_FOOD_CHAT_AT >= NO_FOOD_CHAT_COOLDOWN) {
           LAST_NO_FOOD_CHAT_AT = now
-          const message = await ai.chat(`
-  Tugas: Parafrase pesan "Tidak ada makanan di inventory. minta makanan."
-  Konteks: Chat di server Minecraft.
-  Gaya: Santai, singkat, seperti pemain asli.
-  Aturan:
-  - Hanya berikan teks pesannya saja.
-  - Tanpa tanda kutip.
-  - Maksimal 10 kata.
-  - Jangan ada kalimat pembuka seperti "Ini hasilnya:".
-`);
+          const message = await ai.generateReaction('Tidak ada makanan di inventory')
           bot.chat(message.content)
         }
 

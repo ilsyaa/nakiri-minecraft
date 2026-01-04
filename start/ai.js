@@ -1,5 +1,6 @@
 import OpenAIProvider from '#utils/ai/providers/openai'
 import GeminiProvider from '#utils/ai/providers/gemini'
+import BlackboxProvider from '#utils/ai/providers/blackbox'
 import env from '#start/env'
 
 class AIManager {
@@ -7,6 +8,7 @@ class AIManager {
     this.providers = {
       openai: new OpenAIProvider(),
       gemini: new GeminiProvider(),
+      blackbox: new BlackboxProvider(),
     }
 
     this.activeProvider = env.get('AI_PROVIDER')
@@ -23,8 +25,12 @@ class AIManager {
     return provider
   }
 
-  async chat(message, options = {}) {
-    return this.driver().chat(message, options)
+  async generateReaction(staticText) {
+    return this.driver().generateReaction(staticText)
+  }
+
+  async processPlayerMessage(message) {
+    return this.driver().processPlayerMessage(message)
   }
 }
 

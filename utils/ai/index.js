@@ -3,8 +3,12 @@ export default class AI {
     this.providerName = providerName
   }
 
-  async chat(message, options = {}) {
-    throw new Error('Method chat() harus diimplementasikan')
+  async generateReaction(staticText) {
+    throw new Error('Method generateReaction() harus diimplementasikan')
+  }
+
+  async processPlayerMessage(message) {
+    throw new Error('Method processPlayerMessage() harus diimplementasikan')
   }
 
   formatResponse(data) {
