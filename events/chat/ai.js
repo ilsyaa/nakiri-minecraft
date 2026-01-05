@@ -8,7 +8,7 @@ import pathfinder from 'mineflayer-pathfinder'
 export default async (bot, ctx) => {
   const msg = ctx.message.toString().trim()
 
-  if (!msg.includes('nakiri')) return
+  if (!msg.includes(env.get('BOT_USERNAME').toLowerCase())) return
 
   const pelr = await ai.processPlayerMessage(
     `${getBotStatus(bot)}\n\n${ctx.username}: ${msg}`
@@ -88,7 +88,9 @@ export default async (bot, ctx) => {
 }
 
 const getBotStatus = (bot) => {
-  const modeName = Object.keys(BOT_MODE).find(key => BOT_MODE[key] === BOT_STATE.mode) || 'UNKNOWN'
+  const modeName =
+    Object.keys(BOT_MODE).find((key) => BOT_MODE[key] === BOT_STATE.mode) ||
+    'UNKNOWN'
   let aktivitas = modeName.toLowerCase().replace(/_/g, ' ')
 
   const pos = bot.entity.position
@@ -96,10 +98,16 @@ const getBotStatus = (bot) => {
   const food = Math.round(bot.food)
   const biome = bot.blockAt(pos)?.biome.name || 'unknown'
 
-  const inv = bot.inventory.items().map(i => `${i.displayName} x${i.count}`).join(', ') || 'kosong'
+  const inv =
+    bot.inventory
+      .items()
+      .map((i) => `${i.displayName} x${i.count}`)
+      .join(', ') || 'kosong'
 
   return `[STATUS BOT]
-- Lokasi: ${Math.round(pos.x)}, ${Math.round(pos.y)}, ${Math.round(pos.z)} (${bot.game.dimension})
+- Lokasi: ${Math.round(pos.x)}, ${Math.round(pos.y)}, ${Math.round(pos.z)} (${
+    bot.game.dimension
+  })
 - Tempat: Biome ${biome}s
 - Fisik: HP ${health}/20, Lapar ${food}/20
 - Aktivitas: ${aktivitas}
