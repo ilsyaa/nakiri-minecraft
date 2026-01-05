@@ -1,6 +1,7 @@
 import { startFollowBehavior } from '#behaviors/follow'
 import { startGotoBehavior } from '#behaviors/goto'
 import ai from '#start/ai'
+import env from '#start/env'
 import { BOT_MODE, BOT_STATE } from '#utils/bot_status'
 import consola from 'consola'
 import pathfinder from 'mineflayer-pathfinder'
