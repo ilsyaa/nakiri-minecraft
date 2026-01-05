@@ -14,13 +14,20 @@ export default class BlackboxProvider extends BaseProvider {
       path.join(process.cwd(), 'utils/ai/prompts/player_message.txt'),
       'utf-8'
     )
+    this.promptReactMessage = fs.readFileSync(
+      path.join(process.cwd(), 'utils/ai/prompts/reaction_message.txt'),
+      'utf-8'
+    )
     this.memory = new Set()
     this.maxHistory = 100
   }
 
   async generateReaction(staticText) {
     try {
-      const instruction = `Ubah teks berikut menjadi gaya bicara Nakiri (cewek gamer, santai, ceria, lowercase, banyak singkatan). JANGAN gunakan format JSON, balas dengan teks saja. Teks: "${staticText}"`
+      const instruction = this.promptReactMessage.replace(
+        '{TEXT_HERE}',
+        staticText
+      )
 
       const response = await fetch(this.url, {
         method: 'POST',
@@ -42,7 +49,7 @@ export default class BlackboxProvider extends BaseProvider {
         this.memory.delete(this.memory.keys().next().value)
       }
 
-      this.memory.add(`(BOT Reaction): ${aiReply}`)
+      this.memory.add(`[${env.get('BOT_USERNAME')}]: ${aiReply}`)
 
       return this.formatResponse({
         ok: true,
@@ -93,6 +100,8 @@ export default class BlackboxProvider extends BaseProvider {
       })
 
       const responseText = await response.json()
+
+      this.memory.add(`[${env.get('BOT_USERNAME')}]: ${responseText.choices[0].message.content}`)
 
       return this.formatResponse({
         content: responseText.choices[0].message.content,

@@ -1,4 +1,3 @@
-import OpenAIProvider from '#utils/ai/providers/openai'
 import GeminiProvider from '#utils/ai/providers/gemini'
 import BlackboxProvider from '#utils/ai/providers/blackbox'
 import env from '#start/env'
@@ -6,7 +5,6 @@ import env from '#start/env'
 class AIManager {
   constructor() {
     this.providers = {
-      openai: new OpenAIProvider(),
       gemini: new GeminiProvider(),
       blackbox: new BlackboxProvider(),
     }

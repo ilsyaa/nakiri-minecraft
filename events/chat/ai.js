@@ -1,19 +1,21 @@
 import { startFollowBehavior } from '#behaviors/follow'
+import { startGotoBehavior } from '#behaviors/goto'
 import ai from '#start/ai'
 import { BOT_MODE, BOT_STATE } from '#utils/bot_status'
 import consola from 'consola'
 import pathfinder from 'mineflayer-pathfinder'
-const { GoalNear } = pathfinder.goals
 
 export default async (bot, ctx) => {
   const msg = ctx.message.toString().trim()
 
   if (!msg.includes('nakiri')) return
 
-  const pelr = await ai.processPlayerMessage(msg)
+  const pelr = await ai.processPlayerMessage(
+    `${getBotStatus(bot)}\n\n${ctx.username}: ${msg}`
+  )
 
   if (!pelr || !pelr.ok) {
-    if (pelr) consola.warn("AI Response Not OK:", pelr.message)
+    if (pelr) consola.warn('AI Response Not OK:', pelr.message)
     return
   }
 
@@ -24,13 +26,15 @@ export default async (bot, ctx) => {
       content = JSON.parse(jsonMatch[0])
     }
   } catch (e) {
-    consola.error("Gagal parse JSON dari AI:", e.message)
+    consola.error('Gagal parse JSON dari AI:', e.message)
   }
 
   if (!content) return
 
   const targetName = content.target || ctx.username
-  const target = bot.players[targetName]
+  const target = Object.values(bot.players).find(
+    (player) => player.username.toLowerCase() === targetName.toLowerCase()
+  )
 
   if (!target) {
     consola.warn(`Player ${targetName} tidak ditemukan.`)
@@ -39,36 +43,64 @@ export default async (bot, ctx) => {
 
   switch (content.intent) {
     case 'FOLLOW':
-      if (!target.entity) return bot.chat(`Aku gak liat ${targetName}, sini deketan!`)
+      if (!target.entity)
+        return bot.chat(
+          await ai.generateReaction(`Aku gak liat ${targetName}, sini deketan!`)
+        )
 
       startFollowBehavior({
         bot,
         target,
-        chatMessage: content.reply,
       })
+      bot.chat(content.reply)
       break
 
     case 'GOTO_PLAYER':
-      if (!target.entity) return bot.chat(`${targetName} dimana?, aku gak liat!`)
+      if (!target.entity) {
+        return bot.chat(
+          await ai.generateReaction(`${targetName} dimana?, aku gak liat!`)
+        )
+      }
 
-      BOT_STATE.mode = BOT_MODE.GOTO_PLAYER
-      bot.pathfinder.setGoal(new GoalNear(target.entity.position.x, target.entity.position.y, target.entity.position.z, 1))
-      if (content.reply) bot.chat(content.reply)
+      startGotoBehavior({
+        bot,
+        target: target.entity,
+      })
+      bot.chat(content.reply)
       break
 
     case 'STOP':
       BOT_STATE.mode = BOT_MODE.IDLE
-      BOT_STATE.followTarget = null
       bot.pathfinder.setGoal(null)
-      if (content.reply) bot.chat(content.reply)
+      bot.chat(content.reply)
       break
 
     case 'CHAT':
-      if (content.reply) bot.chat(content.reply)
+      bot.chat(content.reply)
       break
 
     default:
-      consola.info("Intent tidak dikenali:", content.intent)
+      consola.info('Intent tidak dikenali:', content.intent)
       break
   }
+}
+
+const getBotStatus = (bot) => {
+  const pos = bot.entity.position
+  const health = Math.round(bot.health)
+  const food = Math.round(bot.food)
+  const biome = bot.blockAt(pos)?.biome.name || 'unknown'
+  const dimension = bot.game.dimension
+
+  return `[STATUS BOT]
+- Lokasi: x: ${Math.round(pos.x)}, y: ${Math.round(pos.y)}, z: ${Math.round(
+    pos.z
+  )}
+- Dimensi: ${dimension}
+- Darah: ${health}/20
+- Lapar: ${food}/20
+- Biome: ${biome}
+- Mode Saat Ini: ${BOT_STATE.mode}
+- Sedang Mengikuti: ${BOT_STATE.followTargetEntity?.username || 'tidak ada'}
+`.trim()
 }

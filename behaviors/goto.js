@@ -3,7 +3,7 @@ import pathfinder from 'mineflayer-pathfinder'
 import mcDataFactory from 'minecraft-data'
 const { GoalFollow } = pathfinder.goals
 
-export function startFollowBehavior({
+export function startGotoBehavior({
   bot,
   target,
 }) {
@@ -18,8 +18,7 @@ export function startFollowBehavior({
   movements.allowSprinting = true
   bot.pathfinder.setMovements(movements)
 
-  BOT_STATE.followTargetEntity = target.entity
-  BOT_STATE.mode = BOT_MODE.FOLLOW
+  BOT_STATE.mode = BOT_MODE.GOTO
 
-  bot.pathfinder.setGoal(new GoalFollow(BOT_STATE.followTargetEntity, 3), true)
+  bot.pathfinder.setGoal(new GoalFollow(target, 1), true)
 }
