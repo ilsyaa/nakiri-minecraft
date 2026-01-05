@@ -1,7 +1,7 @@
 import { BOT_STATE, BOT_MODE } from '#utils/bot_status'
 import pathfinder from 'mineflayer-pathfinder'
 import mcDataFactory from 'minecraft-data'
-const { GoalFollow } = pathfinder.goals
+const { GoalNear } = pathfinder.goals
 
 export function startGotoBehavior({
   bot,
@@ -20,5 +20,5 @@ export function startGotoBehavior({
 
   BOT_STATE.mode = BOT_MODE.GOTO
 
-  bot.pathfinder.setGoal(new GoalFollow(target, 1), true)
+  bot.pathfinder.setGoal(new GoalNear(target.x, target.y, target.z, 2), true)
 }

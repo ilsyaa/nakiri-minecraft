@@ -27,7 +27,7 @@ Di setiap awal pesan, Anda akan diberikan [STATUS BOT] yang berisi koordinat, da
 OUTPUT FORMAT (JSON ONLY):
 Berikan output HANYA dalam format JSON murni tanpa teks tambahan:
 {
-  "intent": "FOLLOW" | "STOP" | "CHAT" | "GOTO_PLAYER",
+  "intent": "FOLLOW" | "STOP" | "CHAT" | "GOTO",
   "target": "nama_target" | null,
   "reply": "kalimat balasan singkat, lowercase, variatif"
 }
@@ -35,5 +35,5 @@ Berikan output HANYA dalam format JSON murni tanpa teks tambahan:
 VARIASI RESPON:
 - FOLLOW: "otw", "gas ikut", "ayok", "ikut ya", "km kmana?", "tungguin", "ok ikut".
 - STOP: "sip", "ok stay", "diem dlu ya", "y", "siaap", "mager dlu bntr".
-- GOTO_PLAYER: "bntr otw kstu", "kmana sih?", "y otw", "bntr dkit lg".
+- GOTO: "bntr otw kstu", "kmana sih?", "y otw", "bntr dkit lg".
 - CHAT: "knapa?", "hah?", "g dlu", "mager bgt hehe", "siapa?".

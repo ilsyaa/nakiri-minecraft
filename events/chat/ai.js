@@ -31,6 +31,8 @@ export default async (bot, ctx) => {
 
   if (!content) return
 
+  console.log(content)
+
   const targetName = content.target || ctx.username
   const target = Object.values(bot.players).find(
     (player) => player.username.toLowerCase() === targetName.toLowerCase()
@@ -55,7 +57,7 @@ export default async (bot, ctx) => {
       bot.chat(content.reply)
       break
 
-    case 'GOTO_PLAYER':
+    case 'GOTO':
       if (!target.entity) {
         return bot.chat(
           await ai.generateReaction(`${targetName} dimana?, aku gak liat!`)
@@ -64,7 +66,7 @@ export default async (bot, ctx) => {
 
       startGotoBehavior({
         bot,
-        target: target.entity,
+        target: target,
       })
       bot.chat(content.reply)
       break
@@ -86,21 +88,21 @@ export default async (bot, ctx) => {
 }
 
 const getBotStatus = (bot) => {
+  const modeName = Object.keys(BOT_MODE).find(key => BOT_MODE[key] === BOT_STATE.mode) || 'UNKNOWN'
+  let aktivitas = modeName.toLowerCase().replace(/_/g, ' ')
+
   const pos = bot.entity.position
   const health = Math.round(bot.health)
   const food = Math.round(bot.food)
   const biome = bot.blockAt(pos)?.biome.name || 'unknown'
-  const dimension = bot.game.dimension
+
+  const inv = bot.inventory.items().map(i => `${i.displayName} x${i.count}`).join(', ') || 'kosong'
 
   return `[STATUS BOT]
-- Lokasi: x: ${Math.round(pos.x)}, y: ${Math.round(pos.y)}, z: ${Math.round(
-    pos.z
-  )}
-- Dimensi: ${dimension}
-- Darah: ${health}/20
-- Lapar: ${food}/20
-- Biome: ${biome}
-- Mode Saat Ini: ${BOT_STATE.mode}
-- Sedang Mengikuti: ${BOT_STATE.followTargetEntity?.username || 'tidak ada'}
+- Lokasi: ${Math.round(pos.x)}, ${Math.round(pos.y)}, ${Math.round(pos.z)} (${bot.game.dimension})
+- Tempat: Biome ${biome}s
+- Fisik: HP ${health}/20, Lapar ${food}/20
+- Aktivitas: ${aktivitas}
+- Isi Tas / Inventori: ${inv}
 `.trim()
 }
